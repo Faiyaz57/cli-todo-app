@@ -15,28 +15,30 @@ def save_tasks(tasks):
     with open(FILE_NAME, "w") as file:
         json.dump(tasks, file, indent=4)
 
-# Show all tasks
-def show_tasks(tasks):
+# View all tasks (new dedicated function)
+def view_tasks(tasks):
     if not tasks:
-        print("📭 No tasks in your to-do list!")
+        print("\n📭 No tasks found!")
     else:
-        print("\n📝 Your To-Do List:")
+        print("\n📋 Your To-Do List:")
         for i, task in enumerate(tasks, 1):
             status = "✅" if task["done"] else "❌"
             print(f"{i}. {status} {task['task']}")
     print()
 
-# Add new task
+# Add a new task
 def add_task(tasks):
     task_text = input("Enter the task: ").strip()
     if task_text:
         tasks.append({"task": task_text, "done": False})
         save_tasks(tasks)
         print("✅ Task added!\n")
+    else:
+        print("❗ Task cannot be empty.\n")
 
-# Mark task as done
+# Mark a task as done
 def mark_done(tasks):
-    show_tasks(tasks)
+    view_tasks(tasks)
     try:
         choice = int(input("Enter task number to mark as done: "))
         if 1 <= choice <= len(tasks):
@@ -44,13 +46,13 @@ def mark_done(tasks):
             save_tasks(tasks)
             print("🎉 Task marked as done!\n")
         else:
-            print("❗ Invalid task number\n")
+            print("❗ Invalid task number.\n")
     except ValueError:
-        print("❗ Please enter a valid number\n")
+        print("❗ Please enter a valid number.\n")
 
 # Delete a task
 def delete_task(tasks):
-    show_tasks(tasks)
+    view_tasks(tasks)
     try:
         choice = int(input("Enter task number to delete: "))
         if 1 <= choice <= len(tasks):
@@ -58,16 +60,16 @@ def delete_task(tasks):
             save_tasks(tasks)
             print(f"🗑️ Task '{removed['task']}' deleted!\n")
         else:
-            print("❗ Invalid task number\n")
+            print("❗ Invalid task number.\n")
     except ValueError:
-        print("❗ Please enter a valid number\n")
+        print("❗ Please enter a valid number.\n")
 
 # Main CLI loop
 def main():
     tasks = load_tasks()
     while True:
         print("==== 🧾 TO-DO LIST APP ====")
-        print("1. Show Tasks")
+        print("1. View Tasks")
         print("2. Add Task")
         print("3. Mark Task as Done")
         print("4. Delete Task")
@@ -75,7 +77,7 @@ def main():
         choice = input("Choose an option (1-5): ")
 
         if choice == "1":
-            show_tasks(tasks)
+            view_tasks(tasks)
         elif choice == "2":
             add_task(tasks)
         elif choice == "3":
@@ -83,10 +85,10 @@ def main():
         elif choice == "4":
             delete_task(tasks)
         elif choice == "5":
-            print("Goodbye!")
+            print("👋 Goodbye!")
             break
         else:
-            print("Invalid choice. Try again.\n")
+            print("❗ Invalid choice. Try again.\n")
 
 if __name__ == "__main__":
     main()
